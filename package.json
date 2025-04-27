@@ -1,0 +1,11 @@
+{
+  "name": "agent-atom-",
+  "version": "1.0.0",
+  "description": "an AI chatbot with model mistralai/Mistral-Nemo-Instruct-2407 on hugging face",
+  "main": "agent-atom/src/index.js",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "Horatious Harris II",
+  "license": "ISC"
+}
