@@ -1,5 +1,6 @@
 import './App.css';
-import  ChatStream  from "./components/ChatStream/ChatStream";
+import ChatStream from "./components/ChatStream/ChatStream";
+
 function App() {
   return (
     <div className="App">

@@ -2,20 +2,31 @@ import React, { useState } from "react";
 import "./ChatStream.css";
 import { HfInference } from "@huggingface/inference";
 
-const client = new HfInference(process.env.HF_TOKEN);
+const client = new HfInference(process.env.REACT_APP_HF_TOKEN);
 export default function ChatStream() {
 	const [userInput, setUserInput] = useState("");
 	const [agentResponse, setAgentResponse] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleCallAgent = async () => {
+    const handleCallAgent = async (e) => {
+        e.preventDefault();
 		setIsLoading(true);
 
 		try {
-			client.chatCompletionStream({
+			const stream =  client.chatCompletionStream({
 				model: "mistralai/Mistral-Nemo-Instruct-2407",
-				messages: [{ role: "user", content: userInput }],
-			});
+                provider: "hf-inference",
+                messages: [{ role: "user", content: userInput }],
+                temperature: 0.5,
+                max_tokens: 2048,
+                top_p: 0.7,
+            });
+            
+            for await (const chunk of stream) {
+                const message = chunk.choices[0].delta.content;
+                setAgentResponse((prevResponse) => prevResponse + message);
+            }
+            setIsLoading(false);
 		} catch (error) {
 			console.error("Error handling agent call:", error);
 		}
@@ -37,8 +48,18 @@ export default function ChatStream() {
 			</form>
 
 			<div className="responseBox">
-				{agentResponse || "AI response will appear here..."}
+				{agentResponse || <TypingDots />}   
 			</div>
 		</div>
 	);
 }
+
+function TypingDots() {
+    return (
+      <span className="dots">
+        <span>.</span>
+        <span>.</span>
+        <span>.</span>
+      </span>
+    );
+  }
