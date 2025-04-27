@@ -1,9 +1,9 @@
 import './App.css';
-
+import  ChatStream  from "./components/ChatStream/ChatStream";
 function App() {
   return (
     <div className="App">
-     App
+   <ChatStream></ChatStream>
     </div>
   );
 }
